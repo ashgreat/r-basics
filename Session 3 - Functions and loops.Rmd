@@ -1,13 +1,42 @@
 ---
-title: "Functions and Loops"
+title: "Conditionals, Functions, and Loops"
 author: "Ashwin Malshé"
-date: "10/03/2020"
+date: "06/01/2021"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+## Conditionals
+
+Like most other programming languages, R also has `if()` and `else()` statements. Let's look into a simple example. 
+
+Generate a random number from a uniform random distribution. If the number is less than 0.5, print `Tails` otherwise print `Heads`
+
+```{r}
+a <- runif(1)
+print (a)
+if ( a < 0.5) {
+  print("Tails")
+  } else (print("Heads"))
+
+```
+
+R also has a vectorized `ifelse()`. This can speed up operations. For example, consider a vector A with 10 random numbers between 0 and 1. We want to create a character vector such that if a number in A is less than 0.5, we return "Tails", otherwise "Heads".
+
+With `if` and `else`, we will have to evaluate this separately for each element of A. `ifelse` can do it in one shot.
+
+```{r}
+A <- runif(10)
+A
+B <- ifelse(A < 0.5, "Tails", "Heads")
+B
+```
+*This looks like the formula in Excel!*
+
+## Functions
 
 Functions wrap longer procedures in one single command
 
@@ -40,9 +69,9 @@ mySum(5, 10)
 mySum(255, 255)
 ```
 
-Write a function to concatenate two character variables
-For example, you input "Hello" and "world!" separately and you get "Hello world!"
-Recall that we modified this funciton in the class to accommodate output with multiple strings
+Write a function to concatenate two character variables with three delimiters.
+For example, you input "Hello" and "world!" separately and you get "Hello world!" In this case the delimiter is space.
+
 
 ```{r}
 myWord <- function(a, b) {
@@ -54,7 +83,8 @@ myWord <- function(a, b) {
 myWord("Hello", "world!")
 ```
 
-Write a function to winsorize a vector at a given percentage
+Write a function to winsorize a vector at a given percentage. Winsorization is a common data science technique to mitigate the effect of outliers. Rather than deleting these observations, we can set them to a a set percentile. For instance,  if we want to winsorize a variable at 90%, we will set all the values lower than bottom 5% to the 5th percentile and all the values higher than top 5% to the 95th percentile. Thus, we keep middle 90% unchanged.
+
 
 ```{r}
 winsor <- function(vec, w = 0.95) {
