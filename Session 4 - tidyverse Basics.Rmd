@@ -1,7 +1,7 @@
 ---
 title: "tidyverse basics"
 author: "Ashwin Malshe"
-date: "10/03/2020"
+date: "06/01/2021"
 output: html_document
 ---
 
@@ -11,7 +11,13 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+In R you can install packages by typing this in the console:
 
+`install.packages("NAME of the PACKAGE")`
+
+You will need an active internet connection because R will download the package content and then install it. This is a one-time task so never include installation statements in your code.
+
+Let's create a data frame to work with.
 
 ```{r}
 d1 <- data.frame(name = c("John", "Mary", "Toby", "Maya", "Don"),
@@ -40,6 +46,14 @@ d2
 
 Use the data frame `d1` and remove all the rows where `age` is > 50 and `male` is TRUE
 
+```{r}
+d3 <- filter(d1,
+             age > 50 & male == TRUE)
+
+d3
+```
+
+Alternatively,
 
 ```{r}
 d3 <- filter(d1,
