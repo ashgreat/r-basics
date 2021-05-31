@@ -1,7 +1,7 @@
 ---
 title: "Tidy data"
 author: "Ashwin Malshe"
-date: "10/03/2020"
+date: "06/01/2021"
 output:
   pdf_document: default
   html_document:
@@ -28,7 +28,7 @@ First, let's understand what is inside this dataset. A `?` followed by the name 
 
 In this exercise, we will explore the data set.
 
-`summary()` will output simple summary for all the variables in the data set
+`summary()` will output simple summary for all the variables in the data set. This is a Base R function.
 
 ```{r}
 summary(mpg)
@@ -143,6 +143,18 @@ mpg_sum1 <- mpg %>%
 print(mpg_sum1)
 ```
 
+`dplyr` has a new `across()` function, that allows us to perform multiple operations on multiple variables in one shot.
+
+Imagine, you want the mean and standard deviations of `hwy` and `cty`. Here is how to get them in one shot.
+
+```{r}
+mpg %>% 
+  summarize(across(.cols = c(hwy, cty), 
+                   .fns = list(mean = mean, sd = sd)))
+```
+
+
+
 ### Grouping and summarizing
 
 A common operation in data prep is to group datasets by a variable and then summarize the variable.
@@ -152,9 +164,7 @@ For instance, above we got summary statistics for all the full data set. What if
 ```{r}
 mpg_sum2 <- mpg %>% 
   group_by(year) %>% 
-    summarize(hwy_mean = mean(hwy),
-           hwy_med = median(hwy),
-           hwy_sd = sd(hwy)) %>% 
+    summarize(across(hwy, list(mean = mean, median = median, sd = sd))) %>% 
   ungroup()
 ```
 
@@ -165,9 +175,7 @@ print(mpg_sum2)
 ```{r}
 mpg %>% 
   group_by(manufacturer, year) %>% 
-    summarize(hwy_mean = mean(hwy),
-           hwy_med = median(hwy),
-           hwy_sd = sd(hwy)) %>% 
+    summarize(across(hwy, list(mean = mean, median = median, sd = sd))) %>% 
   ungroup()
 ```
 
@@ -176,9 +184,7 @@ mpg %>%
 ```{r}
 mpg_sum3 <- mpg %>% 
   group_by(year) %>% 
-    summarize(hwy_mean = mean(hwy),
-           hwy_med = median(hwy),
-           hwy_sd = sd(hwy),
+    summarize(across(hwy, list(mean = mean, median = median, sd = sd)),
            .groups = "drop") 
 ```
 
@@ -233,7 +239,7 @@ names(mpg)
 
 mpg_left <- mpg %>% 
   select(1:5) %>% 
-  mutate(id = row_number())
+  mutate(id = row_number()) # you will know what this does in a moment
 
 mpg_right <- mpg %>% 
   select(-c(1:5)) %>% 
