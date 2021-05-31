@@ -1,0 +1,161 @@
+---
+title: "Factors"
+author: "Ashwin Malshe"
+date: "10/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Factors
+
+Factors are objects that are build on top of a vector with defined, limited number of levels. Although I am covering them under vectors, they don't behave like vectors much.
+
+```{r}
+v1 <- c(1:10)
+v2 <- c(rnorm(10)) # generate a sequence of 10 random numbers
+```
+
+```{r}
+print(v2)
+```
+
+
+
+```{r}
+v2_f <- factor(v2)
+
+print(v2_f)
+```
+
+```{r}
+attributes(v2_f)
+```
+
+
+The clearest distinction between a factor and a character vector is given by this example:
+
+```{r}
+# Start off with the frequency distribution
+table(v2)
+table(v2_f)
+```
+
+```{r}
+# Now let's limit the frequency distribution to the first 5 values in each case
+table(v2[1:5])
+table(v2_f[1:5])
+
+```
+
+
+Notice that for the vector, we have no frequencies for the numbers 6 to 10 but for the factor we have explicitly 0 frequencies. What causes this difference?
+
+Let's print the altered vector and the factor
+
+```{r}
+print(v2[1:5])
+
+print(v2_f[1:5])
+
+```
+
+So although both the objects have the same elements, factors still have their original levels. Thus, you can subset a factor but that doesn't automatically subset the associated levels!
+
+Let's create a factor from v1, which is an integer vector
+
+```{r}
+v1_f <- factor(v1)
+v1_f
+```
+
+We can change the levels associated with factor easily
+This will fail:
+
+```{r}
+attributes(v2_f)$levels <- c(1:10)
+```
+
+Why did we get a warning?
+
+
+Do we know the class of vector `levels`?
+Let's find it out.
+
+```{r}
+v2_f <- factor(v2)
+class(attr(v2_f, 'levels'))
+```
+
+What if we assign 1-10 values but as character?
+
+```{r}
+attr(v2_f, 'levels') <- as.character(c(1:10))
+```
+
+Now we don't get a warning!
+
+We learned a new function `as.character()`. You will come across several `as.something` functions in R. These functions coerce an object to change its class.
+
+```{r}
+attr(v2_f, 'levels')
+```
+
+In practice it's better to change the levels of a factor by using specific functions. `forcats` package in R helps with this.
+
+What if we want to extract the factor levels as integers though?
+
+
+```{r}
+as.numeric(levels(v2_f))
+```
+
+What about the levels of `v1_f`? They looked integers!
+
+```{r}
+levels(v1_f)
+```
+
+Well, not so much in reality. We need to convert them to numbers too if you want to use them in mathematical operations.
+
+
+```{r}
+as.numeric(levels(v1_f))
+```
+
+
+### Example
+
+Consider the following character vector with months of a year. We will plot the frequency distribution of this vector. As each months shows up once, all of them will have the same unit frequency.
+
+```{r}
+mons <- c("JAN","FEB","MAR","APR","MAY","JUN",
+          "JUL","AUG","SEP","OCT","NOV","DEC")
+plot(table(mons))
+```
+
+Can we change the labels on the X axis?
+
+Yes, if you set the `levels` explicitly to the correct ordering.
+
+```{r}
+mons_f <- factor(mons,
+                 levels = mons)
+plot(table(mons_f))
+```
+
+
+#### Ordered factors
+
+Ordered factors hold the information on the ordering of the factor levels.
+
+```{r}
+mons_o <- factor(mons,
+                 levels = mons,
+                 ordered = TRUE)
+
+print(mons_o)
+```
+This can be useful when we want to order variable levels in a survey. A commonly used scale for survey data collection is a five-point Likert scale with varying levels of agreement with statement: "strongly agree", "agree", "neutral", "disagree" and "strongly disagree". We can create an ordered factor which will preserve the rank ordering of the levels.

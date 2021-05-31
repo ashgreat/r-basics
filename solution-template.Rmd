@@ -1,0 +1,227 @@
+---
+title: "Homework 0"
+author: "Write your name"
+date: "October 2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+This homework uses `txhousing` dataset from `ggplot2` package, which is a part of the `tidyverse`. Additionally, it uses Consumer Price Index (CPI) dataset, which I downloaded from the BLS website (https://data.bls.gov/timeseries/CUUR0000SA0) and cleaned. I will provide the code for cleaning CPI data in the solution to this homework.
+
+`txhousing` consists of the following variables:
+
+```{r}
+names(txhousing)
+```
+
+Before you start working on this homework, study the variables in `txhousing` as well as the structure of the dataset by typing this command in your console.
+
+```{r echo = TRUE, eval=FALSE}
+help(txhousing)
+```
+
+Take a peek at the data by typing:
+
+```{r echo=TRUE, eval=FALSE}
+head(txhousing)
+```
+
+
+Save the CPI dataset in your project folder where you have also saved this homework file. Read the CPI dataset into this session. It consists of the following columns:
+
+```{r}
+cpi <- #read your rds file here
+
+names(cpi)
+```
+
+Take a look at the first few observations by using `head()` function. 
+
+
+<p style="border:3px; border-style:solid; border-color:#b50000; padding: 1em;">This homework consists of 10 questions and each carries one point. Your objective is to reproduce the output shown in the HTML file for Q1 through Q9. For Q10 just print the name of the city and the value.</p>
+
+Dollar values over a long time series make comparison difficult due to inflation. \$100 in January 2000 is worth \$154 in July 2020. In `txhousing`, there are two variables&mdash;`volume` and `median`&mdash;which are specified in unadjusted USD. Questions 1 to 4 are designed to inflation-adjust these two variables to July 2020 dollars.
+
+### Q1
+
+Create a new data frame `month_map` with 12 rows and 2 columns titled `month_name` and `month`. `month_name` in `month_map` should have only the unique values from `month_name` column in CPI data frame. `month` column should contain the month numbers from 1 to 12.
+
+Try to not type out this data frame manually and instead try to do it algorithmically. This is how it will look:
+
+```{r}
+
+
+
+```
+
+### Q2
+
+Merge `month_map` to the CPI data frame. Explicitly identify the common key variable on which you will perform the merge. Store the resulting merged data frame as `cpi_merge`. **Print the first six rows.**
+
+Here are the first six rows of `cpi_merge`:
+
+```{r}
+
+
+
+```
+
+### Q3
+
+We want to add a column to the `txhousing` data frame that holds the information on the CPI. Rather than altering `txhousing`, create a new data frame `housing` by merging `txhousing` and `cpi_merge`. The common keys for merging are `year` and `month`. Note that the resulting data frame is essentially `txhousing` with *just one more column* of CPI. 
+
+Here are the top six rows of `housing`:
+
+```{r}
+
+
+
+
+```
+
+### Q4
+
+Modify `housing` by adding these new columns:
+
+1. `cpi_latest` -  Contains the CPI of July 2020. This entire column will have the same value appearing in each cell.
+
+2. `multiplier` - Ratio of `cpi_latest` and `cpi`
+
+3. `volume_adj` - Adjusted volume as a product of `volume` and `multiplier`
+
+4. `median_adj` - Adjusted median sale price as a product of `median` and `multiplier`
+
+Here I show the top six rows with only a select few columns to help you ensure your output resembles this:
+
+```{r}
+
+```
+
+### Q5
+
+Using `housing` from Q4, create a new data frame `housing_sum1` with this information for each `city` *across all years and months*:
+
+1. Maximum and minimum `volume_adj`
+2. Maximum and minimum `median_adj` sale price
+
+*Hint: If you group by `city`, you will get the summary across all the years and months. *
+
+Merge `housing_sum1` into `housing` by `city` and save it as a new dataset `housing_1`.
+
+Here I show first six rows of `housing_1` and only a select columns:
+
+```{r}
+
+```
+Here I show *last* six rows of `housing_1` and only a select columns:
+
+```{r}
+
+```
+
+### Q6
+
+1. Using `housing_1` from Q5, create a new data frame `housing_min` which will retain only the rows of `housing_1` where `volume_adj` of a `city` was equal to the minimum adjusted volume.
+
+Here I show first six rows of `housing_min` and only a select columns:
+
+```{r}
+
+
+```
+
+
+2. Using `housing_1` from Q5, create a new data frame `housing_max` which will retain only the rows of `housing_1` where `median_adj` of a `city` was equal to the maximum adjusted median sale price.
+
+Here I show first six rows of `housing_max` and only a select columns:
+
+```{r}
+
+```
+
+### Q7
+
+Using `housing_1` from Q5, create a new data frame `housing_sum2` with this information for each `year` and `month` pair *across all cities*:
+
+1. Median listings
+2. Median sales
+
+*Hint: If even a single value for `listings` or `sales` of a `city` is `NA`, the median of that variable will be `NA`. In order to avoid this, use `na.rm = TRUE` argument in `median()`. *
+
+Here I show first six rows of `housing_sum2` and all the columns:
+
+```{r}
+
+
+```
+
+Merge `housing_sum2` into `housing_1` and save a new data frame `housing_2`.
+
+Here I show first six rows of `housing_2` and some of the columns:
+
+```{r}
+
+```
+
+
+### Q8
+
+Modify `housing_2` from Q7 to add these indicator variables (also called dummy variables):
+
+1. `listings_ind` - If a city's `listings` is less than or equal to the median listings for that `year` and `month` across all the cities, the value should be `0` else it should be `1`.
+
+2. `sales_ind` - If a city's `sales` is less than or equal to the median sales for that `year` and `month` across all the cities, the value should be `0` else it should be `1`.
+
+*Hint: This can be achieved using `ifelse()` function from R along with `mutate()` from `dplyr`*
+
+Here I show first six rows of `housing_2` and some of the columns:
+
+```{r}
+
+
+```
+
+
+
+### Q9
+
+Using `housing_2` from Q8, add a new variable `market_hotness` as follows:
+
+
+```{r}
+
+
+```
+
+Here I show first six rows of `housing_2` and some of the columns:
+
+```{r}
+
+```
+
+### Q10
+
+
+Which city has the highest *average* `median_adj` sale price and what is that price?
+
+```{r}
+
+```
+
+
+
+<br>
+<br>
+<br>
+
+<hr style="border: 2px solid#5b9aa0;" />
+
+
+
+
+

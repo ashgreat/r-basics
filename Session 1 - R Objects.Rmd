@@ -1,0 +1,215 @@
+---
+title: "Session 1: R Objects"
+author: "Ashwin Malshe"
+date: "10/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Atomic vectors
+
+This next R code chunk creates and outputs a character vector. `c()` concatenates elements to form a single vector. In R even a constant is a vector of length 1. So you can use a `c()` to concatenate vectors of any length.
+
+```{r my-chunk1}
+vec1 <- c("a", "b", "c", "d", "e")
+print(vec1)
+
+```
+
+Next chunk create and prints out a double vector
+
+```{r}
+vec2 <- c(3.14159, 1.414, 5.678, 9.01)
+print(vec2)
+```
+
+The other two commonly used vector types in R are:
+
+- logical
+- integer
+
+Logical vector
+```{r}
+vec3 <- c(rep(TRUE, 5), rep(FALSE, 6))
+print(vec3)
+```
+
+Both integer and double are of type `numeric`
+
+**Atomic vectors are homogeneous**
+
+We can get the length of a vector by using `length()` function:
+
+```{r}
+length(vec1)
+```
+
+Vectors can have names as well:
+
+```{r}
+vec4 <- c(p = 1, q = 2, r = 3)
+print(vec4)
+```
+
+Or
+
+```{r}
+vec5 <- setNames(1:3, c("p", "q", "r"))
+print(vec5)
+```
+
+
+## Matrix
+
+A matrix is a two-dimensional vector
+
+```{r}
+m1 <- matrix(c(3.14159, 1.414, 5.678, 9.01),
+             nrow = 2,
+             ncol = 2)
+
+print(m1)
+```
+
+```{r}
+m2 <- matrix(data = vec2, nrow = 2)
+print(m2)
+```
+
+
+```{r}
+identical(m1, m2)
+```
+
+Get the dimensions using `dim()` function
+
+```{r}
+dim(m1)
+```
+
+
+## Data Frame
+
+Tabular object which binds vectors of same lengths sideways. A data frame can contain different types of vectors. For example, the following code creates a data frame with three types of vectors - character, integer, and logical.
+
+```{r}
+d1 <- data.frame(name = c("John", "Mary", "Toby", "Maya", "Don"),
+                 age = as.integer(c(20, 21, 45, 78, 90)),
+                 male = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+
+print(d1)
+```
+
+Attributes of a data frame:
+
+```{r}
+attributes(d1)
+```
+
+
+
+### Subsetting a data frame
+
+Print first column of `d1`
+
+```{r}
+print(d1$name)
+```
+
+
+```{r}
+print(d1[, 1])
+```
+
+```{r}
+print(d1[1, ])
+```
+
+
+Output the intersection of 2nd row and 3rd column
+
+```{r}
+print(d1[2, 3])
+```
+Print the column names of the data frame.
+
+```{r}
+names(d1)
+```
+
+Print the first two rows and first two columns of `d1`
+
+```{r}
+print(d1[c(1, 2), c(1, 2)])
+```
+
+```{r}
+print(d1[1:2, 1:2])
+```
+
+Print the 1st and the 3rd row and the 1st and the 3rd columns
+
+```{r}
+print(d1[c(1, 3), c(1, 3)])
+```
+
+
+```{r}
+print(d1[1:3, 1:3])
+```
+
+## Lists
+
+Lists are a type of vector but they are heterogeneous. They can be recursive, and have multiple lists nested within. 
+
+Commonly `json` files are read into R as lists.
+
+
+```{r}
+list1 <- list(vector1 = vec1,
+              vector2 = vec2,
+              matrix1 = m1,
+              dataframe1 = d1)
+```
+
+```{r}
+print(list1)
+```
+
+
+```{r}
+print(list1$vector1)
+```
+
+Length of a list
+
+```{r}
+length(list1)
+```
+
+Subsetting a list using `[`
+
+
+```{r}
+list1_1 <- list1[1]
+print(list1_1)
+```
+
+```{r}
+list1_2 <- list1[[1]]
+print(list1_2)
+```
+Check the class
+
+```{r}
+class(list1_1)
+```
+
+```{r}
+class(list1_2)
+```
+
+Thus, subsetting a list using `[` returns **a list containing** the requested object while using `[[` returns the object.

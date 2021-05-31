@@ -1,0 +1,53 @@
+---
+title: "Pipe Operator"
+author: "Ashwin Malshe"
+date: "10/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+
+```{r}
+sum(2, 5)
+
+```
+
+
+```{r}
+
+2 %>% sum(5)
+```
+
+```{r}
+paste("My name is", "Ashwin")
+```
+
+
+```{r}
+"Ashwin" %>% paste("My name is")
+```
+
+```{r}
+summary(lm(hwy ~ cty, data = mpg))
+```
+
+```{r}
+lm(hwy ~ cty, data = mpg) %>% 
+  summary()
+```
+
+```{r}
+mpg %>% 
+  lm(hwy ~ cty) %>% 
+  summary()
+```
+
+```{r}
+mpg %>% 
+  lm(hwy ~ cty, data = .) %>% 
+  summary()
+```
+

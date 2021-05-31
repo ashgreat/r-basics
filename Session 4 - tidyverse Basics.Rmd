@@ -1,0 +1,87 @@
+---
+title: "tidyverse basics"
+author: "Ashwin Malshe"
+date: "10/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+
+
+```{r}
+d1 <- data.frame(name = c("John", "Mary", "Toby", "Maya", "Don"),
+                 age = c(20, 21, 45, 78, 90),
+                 male = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+
+print(d1)
+```
+
+### Exercise 1
+
+Use the data frame `d1` and keep all the rows where `age` is <= 50.
+
+
+For this task, we need to use `filter()` from `dplyr`
+
+```{r}
+
+d2 <- filter(d1,
+             age <= 50)
+
+d2
+```
+
+### Exercise 2
+
+Use the data frame `d1` and remove all the rows where `age` is > 50 and `male` is TRUE
+
+
+```{r}
+d3 <- filter(d1,
+             age <= 50 | male == FALSE)
+
+d3
+```
+
+### Exercise 3
+
+From `d1` keep only the first two columns labeled `name` and `age`
+
+Here we use `select()` function:
+
+```{r}
+select(d1, name, age)
+```
+
+### Exercise 4
+
+Extract all the columns with names starting with letter "n".
+
+```{r}
+select(d1, starts_with("n"))
+```
+
+### Exercise 5
+
+Extract all the numeric columns
+
+
+```{r}
+select(d1, is.numeric)
+```
+
+### Exercise 6
+
+Rename `name` as `first_name` and `age` as `age_in_years`
+
+```{r}
+rename(d1,
+       first_name = name,
+       age_in_years = age)
+```
+

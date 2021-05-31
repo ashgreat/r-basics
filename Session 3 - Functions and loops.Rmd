@@ -1,0 +1,130 @@
+---
+title: "Functions and Loops"
+author: "Ashwin Malshé"
+date: "10/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Functions wrap longer procedures in one single command
+
+Next we will create a function called forever21.
+
+```{r}
+forever21 <- function(age) {
+  if (age <= 21) {
+    return(age)
+  } else {
+    return(21)
+  }
+}
+```
+
+
+```{r}
+forever21(50)
+forever21(15)
+```
+
+Write a function to add two numbers
+
+```{r}
+mySum <- function(a, b) {
+  return(a + b)
+}
+
+mySum(5, 10)
+mySum(255, 255)
+```
+
+Write a function to concatenate two character variables
+For example, you input "Hello" and "world!" separately and you get "Hello world!"
+Recall that we modified this funciton in the class to accommodate output with multiple strings
+
+```{r}
+myWord <- function(a, b) {
+  w1 <- paste(a, b, sep = "|")
+  w2 <- paste(a, b, sep = "-")
+  w3 <- paste(a, b, sep = "***")
+  return(c(w1, w2, w3))
+}
+myWord("Hello", "world!")
+```
+
+Write a function to winsorize a vector at a given percentage
+
+```{r}
+winsor <- function(vec, w = 0.95) {
+  l1 <- (1 - w) / 2
+  l2 <- 1 - l1
+  q <- quantile(vec, c(l1, l2), type = 1)
+  vec1 <- ifelse(vec < q[1], q[1], vec)
+  vec2 <- ifelse(vec1 > q[2], q[2], vec1)
+  return(vec2)
+}
+```
+
+
+
+```{r}
+winsor(vec = c(1:100), w = 0.9)
+```
+
+
+
+## Writing functions with default values
+
+Write a function for area of a circle with radius r. The default value should be for radius r = 1
+
+```{r}
+cirArea <- function(r = 1) pi * r^2
+```
+
+get area of a circle with radius = 5. Verify the result
+
+```{r}
+# Answer using the function
+cirArea(5)
+# Answer using the raw formula
+pi * 5^2
+
+identical(cirArea(5), pi * 5^2)
+```
+
+
+## Saving and retrieving functions
+Copy the function and paste it in an R script. Save the file on your hard disk and make note of the path to that file.
+
+When you want to load the function, use 
+
+`source("path name to the function R file")`
+
+
+## Looping in R
+
+```{r}
+for (i in 1:10) {
+  print(paste("My number is", i))
+}
+```
+
+Also check out `while` command in R. It can be used when the condition is not easy or possible to write in a `for`. For example, you may want to keep running the loop until specific time (e.g., 5 pm) or until you get a specific number of observations from an operation (e.g., download 5,000 tweets)
+
+```{r}
+i <- 1
+while(i <= 10) {
+  print(paste("My number is", i))
+  i <- i + 1
+}
+```
+
+
+
+
+
+
+
+
