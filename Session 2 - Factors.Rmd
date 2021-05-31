@@ -1,7 +1,7 @@
 ---
 title: "Factors"
 author: "Ashwin Malshe"
-date: "10/3/2020"
+date: "06/01/2021"
 output: html_document
 ---
 
@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Factors
 
-Factors are objects that are build on top of a vector with defined, limited number of levels. Although I am covering them under vectors, they don't behave like vectors much.
+Factors are objects that are build on top of a vector with defined, limited number of **levels**. Although I am covering them under vectors, they don't behave like vectors much.
 
 ```{r}
 v1 <- c(1:10)
